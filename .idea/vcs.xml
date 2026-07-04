@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/dlib" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/backends/cadence/utils/FACTO" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/backends/mlx/third-party/mlx" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/backends/vulkan/third-party/Vulkan-Headers" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/backends/vulkan/third-party/VulkanMemoryAllocator" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/backends/vulkan/third-party/volk" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/backends/xnnpack/third-party/FP16" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/backends/xnnpack/third-party/FXdiv" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/backends/xnnpack/third-party/XNNPACK" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/backends/xnnpack/third-party/cpuinfo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/backends/xnnpack/third-party/pthreadpool" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/extension/llm/tokenizers" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/extension/llm/tokenizers/third-party/abseil-cpp" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/extension/llm/tokenizers/third-party/json" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/extension/llm/tokenizers/third-party/pcre2" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/extension/llm/tokenizers/third-party/pcre2/deps/sljit" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/extension/llm/tokenizers/third-party/re2" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/extension/llm/tokenizers/third-party/sentencepiece" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/kernels/optimized/third-party/eigen" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/shim" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/third-party/ao" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/third-party/ao/third_party/cutlass" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/third-party/flatbuffers" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/third-party/flatcc" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/third-party/gflags" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/third-party/googletest" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/third-party/ios-cmake" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/third-party/json" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/third-party/pocketfft" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/third-party/prelude" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/external/executorch/third-party/pybind11" vcs="Git" />
+  </component>
+</project>
