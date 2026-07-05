@@ -9,7 +9,6 @@ add_executable(
         ${CMAKE_SOURCE_DIR}/src/FaceDetector.cpp
         ${CMAKE_SOURCE_DIR}/src/FaceRecognizer.cpp
         ${CMAKE_SOURCE_DIR}/src/VectorIndex.cpp
-        ${CMAKE_SOURCE_DIR}/src/library.cpp
         FaceDetectorTests.cpp
         TestUtils.h
         FaceEmbedderTests.cpp

@@ -26,7 +26,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 # ============= facenet_vectorsearch library target configuration ======================
-add_library(facenet_vectorsearch SHARED src/library.cpp
+add_library(facenet_vectorsearch SHARED
         src/FaceDetector.cpp
         src/FaceDetector.h
         src/FaceEmbedder.cpp
