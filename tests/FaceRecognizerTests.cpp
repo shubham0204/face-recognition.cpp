@@ -13,21 +13,21 @@ TEST(FaceRecognizerTests, CreateInsertReadDelete) {
     dlib::matrix<dlib::rgb_pixel> inputImage;
     dlib::load_png(inputImage, imageFilePath);
 
-    const std::vector inputImages = {inputImage};
     const std::string personName = "Shubham";
 
     auto start = std::chrono::steady_clock::now();
-    faceRecognizer.insert(personName, inputImages);
+    faceRecognizer.insert(personName, {inputImage});
     auto end = std::chrono::steady_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
     std::cout << "[PERF] [Insertion time] " << duration.count() << " milliseconds" << '\n';
 
     start = std::chrono::steady_clock::now();
-    const auto results = faceRecognizer.recognize(inputImages);
+    const auto results = faceRecognizer.recognize(inputImage);
     end = std::chrono::steady_clock::now();
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
     std::cout << "[PERF] [Retrieval time] " << duration.count() << " milliseconds" << '\n';
 
     EXPECT_EQ(results.size(), 1);
+    EXPECT_TRUE(results[0].boundingBox.area() > 0);
     EXPECT_EQ(results[0].personName, personName);
 }
