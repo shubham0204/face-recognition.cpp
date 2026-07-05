@@ -30,12 +30,6 @@ TEST(FaceDetectorSmokeTests, CropFaces) {
     const auto faces = faceDetector.detectFaces(inputImage);
     EXPECT_EQ(faces.size(), 1);
 
-    std::vector<dlib::chip_details> chipDetails;
-    chipDetails.reserve(faces.size());
-for (const auto& face : faces) {
-        chipDetails.emplace_back(face);
-    }
-    dlib::array<dlib::matrix<dlib::rgb_pixel>> croppedImages(chipDetails.size());
-    dlib::extract_image_chips(inputImage, chipDetails, croppedImages);
+    const auto croppedImages = FaceDetector::cropFaces(inputImage, faces);
     EXPECT_EQ(croppedImages.size(), faces.size());
 }

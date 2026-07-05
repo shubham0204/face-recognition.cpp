@@ -24,7 +24,7 @@ TEST(VectorDBTests, NearestNeighbor) {
     const auto records = index.getRecords();
     EXPECT_EQ(records.size(), 10);
 
-    const NNQueryResult nearestNeighbor = index.nearestNeighbor(createRandomEmbedding());
-    EXPECT_TRUE(nearestNeighbor.personName.starts_with("Person"));
-    EXPECT_TRUE(-1 < nearestNeighbor.cosineSimilarity && nearestNeighbor.cosineSimilarity < 1);
+    const auto [personName, cosineSimilarity] = index.nearestNeighbor(createRandomEmbedding());
+    EXPECT_TRUE(personName.starts_with("Person"));
+    EXPECT_TRUE(-1 < cosineSimilarity && cosineSimilarity < 1);
 }

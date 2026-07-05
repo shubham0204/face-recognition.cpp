@@ -35,7 +35,7 @@ add_library(facenet_vectorsearch SHARED src/library.cpp
         src/VectorIndex.h
         src/FaceRecognizer.cpp
         src/FaceRecognizer.h
-        src/models/InsertInfo.h)
+)
 target_link_libraries(
         facenet_vectorsearch
         PRIVATE

@@ -11,6 +11,8 @@ class FaceDetector {
     FaceDetector() { detector = dlib::get_frontal_face_detector(); };
 
     std::vector<dlib::rectangle> detectFaces(const dlib::matrix<dlib::rgb_pixel>& inputImage);
+
+    static dlib::array<dlib::matrix<dlib::rgb_pixel>> cropFaces(const dlib::matrix<dlib::rgb_pixel>& inputImage, const std::vector<dlib::rectangle>& rectangles);
 };
 
 #endif // FACENET_VECTORSEARCH_FACEDETECTOR_H

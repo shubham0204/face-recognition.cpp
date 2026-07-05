@@ -7,12 +7,14 @@ add_executable(
         # manually, to avoid re-linking executorch
         ${CMAKE_SOURCE_DIR}/src/FaceEmbedder.cpp
         ${CMAKE_SOURCE_DIR}/src/FaceDetector.cpp
+        ${CMAKE_SOURCE_DIR}/src/FaceRecognizer.cpp
         ${CMAKE_SOURCE_DIR}/src/VectorIndex.cpp
         ${CMAKE_SOURCE_DIR}/src/library.cpp
         FaceDetectorTests.cpp
         TestUtils.h
         FaceEmbedderTests.cpp
         VectorDBTests.cpp
+        FaceRecognizerTests.cpp
 )
 target_link_libraries(
         ${TEST_TARGET_NAME}
