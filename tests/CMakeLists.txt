@@ -5,9 +5,9 @@ add_executable(
         ${TEST_TARGET_NAME}
         # add the sources of the facenet_vectorsearch library target
         # manually, to avoid re-linking executorch
-        ${CMAKE_SOURCE_DIR}/src/VectorDB.cpp
         ${CMAKE_SOURCE_DIR}/src/FaceEmbedder.cpp
         ${CMAKE_SOURCE_DIR}/src/FaceDetector.cpp
+        ${CMAKE_SOURCE_DIR}/src/VectorIndex.cpp
         ${CMAKE_SOURCE_DIR}/src/library.cpp
         FaceDetectorTests.cpp
         TestUtils.h

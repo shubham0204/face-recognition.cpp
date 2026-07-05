@@ -1,6 +1,8 @@
 #ifndef FACENET_VECTORSEARCH_HELPER_H
 #define FACENET_VECTORSEARCH_HELPER_H
 #include <string>
+#include <filesystem>
+#include "FaceEmbedder.h"
 
 /**
  *  Accepts a resource `filename` and returns the absolute path.
@@ -12,5 +14,17 @@
  * @return Absolute path of the resource
  */
 inline std::string getResourcePath(const std::string& filename) { return std::string(TEST_RESOURCE_DIR) + filename; }
+
+inline void deleteResource(const std::string& filename) {
+    std::filesystem::remove(getResourcePath(filename));
+}
+
+inline std::array<float, EMBEDDING_DIM> createRandomEmbedding() {
+    std::array<float, EMBEDDING_DIM> embedding{};
+    for (int i = 0; i < EMBEDDING_DIM; i++) {
+        embedding[i] = drand48() / static_cast<double>(RAND_MAX);
+    }
+    return embedding;
+}
 
 #endif // FACENET_VECTORSEARCH_HELPER_H

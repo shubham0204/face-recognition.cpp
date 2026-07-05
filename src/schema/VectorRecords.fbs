@@ -1,0 +1,11 @@
+table VectorRecord {
+    vector: [float32];
+    norm: float32;
+    person_name: string;
+}
+
+table VectorRecords {
+    records: [VectorRecord];
+}
+
+root_type VectorRecords;
