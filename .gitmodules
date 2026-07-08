@@ -1,0 +1,6 @@
+[submodule "external/executorch"]
+    path = external/executorch
+    url = https://github.com/pytorch/executorch
+[submodule "external/dlib"]
+    path = external/dlib
+    url = https://github.com/davisking/dlib
