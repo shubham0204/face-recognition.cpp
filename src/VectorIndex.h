@@ -2,6 +2,7 @@
 #define FACENET_VECTORSEARCH_VECTORDB_H
 
 #include "FaceEmbedder.h"
+#include "NNQueryResult.h"
 #include "dlib/geometry/rectangle.h"
 #include "schema/VectorRecords_generated.h"
 
@@ -16,12 +17,6 @@ struct VectorRecordData {
     std::array<float, EMBEDDING_DIM> vector{};
     float norm = 0.0f;
     std::string personName;
-};
-
-struct NNQueryResult {
-    std::string personName;
-    float cosineSimilarity = 0.0f;
-    dlib::rectangle boundingBox;
 };
 
 class VectorIndex {

@@ -1,5 +1,7 @@
 #include "VectorIndex.h"
 
+#include "NNQueryResult.h"
+
 void VectorIndex::loadRecordsFromFile() {
     std::ifstream inputStream(dbFilePath, std::ios::binary);
     if (!inputStream.is_open()) {

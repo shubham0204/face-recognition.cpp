@@ -33,9 +33,15 @@ add_library(facenet_vectorsearch SHARED
         src/FaceEmbedder.h
         src/VectorIndex.cpp
         src/VectorIndex.h
+        src/FaceRecognizerInternal.cpp
+        src/FaceRecognizerInternal.h
+        src/DetectedFaceEmbeddings.h
+        src/Utils.h
+        include/IntBufferImage.h
+        include/FaceRecognizer.h
+        include/FaceBoundingBox.h
+        include/NNQueryResult.h
         src/FaceRecognizer.cpp
-        src/FaceRecognizer.h
-        src/models/DetectedFaceEmbeddings.h
 )
 target_link_libraries(
         facenet_vectorsearch

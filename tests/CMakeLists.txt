@@ -7,7 +7,7 @@ add_executable(
         # manually, to avoid re-linking executorch
         ${CMAKE_SOURCE_DIR}/src/FaceEmbedder.cpp
         ${CMAKE_SOURCE_DIR}/src/FaceDetector.cpp
-        ${CMAKE_SOURCE_DIR}/src/FaceRecognizer.cpp
+        ${CMAKE_SOURCE_DIR}/src/FaceRecognizerInternal.cpp
         ${CMAKE_SOURCE_DIR}/src/VectorIndex.cpp
         FaceDetectorTests.cpp
         TestUtils.h
