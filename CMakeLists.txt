@@ -69,5 +69,5 @@ endif ()
 # JNI binding
 if (BUILD_JNI_BINDING)
     message(STATUS "Building JNI binding...")
-    add_subdirectory(jni)
+    add_subdirectory(bindings/android)
 endif ()
