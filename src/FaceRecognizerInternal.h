@@ -17,8 +17,8 @@ class FaceRecognizerInternal : public FaceRecognizer {
     FaceEmbedder faceEmbedder;
     VectorIndex vectorIndex;
 
-    DetectedFaceEmbeddings detectFacesAndComputeEmbeddings(const std::vector<dlib::matrix<dlib::rgb_pixel>>& images,
-                                                           bool returnBoundingBoxes = false);
+    std::optional<DetectedFaceEmbeddings> detectFacesAndComputeEmbeddings(const std::vector<dlib::matrix<dlib::rgb_pixel>>& images,
+                                                                          bool returnBoundingBoxes = false);
 
     void insert(const std::string& personName, const std::vector<dlib::matrix<dlib::rgb_pixel>>& images);
 

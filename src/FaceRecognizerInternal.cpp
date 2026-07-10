@@ -5,8 +5,11 @@
 #include "Utils.h"
 
 void FaceRecognizerInternal::insert(const std::string& personName, const std::vector<dlib::matrix<dlib::rgb_pixel>>& images) {
-    const auto [embeddings, _] = this->detectFacesAndComputeEmbeddings(images, false);
-    for (const auto& embedding : embeddings) {
+    const auto faceDetectionResult = this->detectFacesAndComputeEmbeddings(images, false);
+    if (!faceDetectionResult.has_value()) {
+        return;
+    }
+    for (const auto& embedding : faceDetectionResult->embeddings) {
         vectorIndex.insert(personName, embedding);
     }
 }
@@ -38,8 +41,12 @@ std::vector<NNQueryResult> FaceRecognizerInternal::recognize(const IntBufferImag
 
 std::vector<NNQueryResult> FaceRecognizerInternal::recognize(const dlib::matrix<dlib::rgb_pixel>& image) {
     const auto images = {image};
-    const auto [embeddings, faceBoundingBoxes] = detectFacesAndComputeEmbeddings(images, true);
+    const auto faceDetectionResult = detectFacesAndComputeEmbeddings(images, true);
     std::vector<NNQueryResult> results;
+    if (!faceDetectionResult.has_value()) {
+        return results;
+    }
+    const auto [embeddings, faceBoundingBoxes] = faceDetectionResult.value();
     for (int i = 0; i < embeddings.size(); i++) {
         auto nnResult = vectorIndex.nearestNeighbor(embeddings[i]);
         nnResult.faceBoundingBox = Utils::fromDlibRectangle(faceBoundingBoxes[i]);
@@ -48,8 +55,8 @@ std::vector<NNQueryResult> FaceRecognizerInternal::recognize(const dlib::matrix<
     return results;
 }
 
-DetectedFaceEmbeddings FaceRecognizerInternal::detectFacesAndComputeEmbeddings(const std::vector<dlib::matrix<dlib::rgb_pixel>>& images,
-                                                                               const bool returnBoundingBoxes) {
+std::optional<DetectedFaceEmbeddings>
+FaceRecognizerInternal::detectFacesAndComputeEmbeddings(const std::vector<dlib::matrix<dlib::rgb_pixel>>& images, const bool returnBoundingBoxes) {
     std::vector<dlib::matrix<dlib::rgb_pixel>> croppedImages;
     std::vector<dlib::rectangle> boundingBoxes;
     for (const auto& image : images) {
