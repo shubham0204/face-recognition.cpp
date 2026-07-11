@@ -1,14 +1,14 @@
 #include "FaceEmbedder.h"
 
-
+#include "Types.h"
 #include "dlib/image_transforms/interpolation.h"
 #include "dlib/matrix/matrix.h"
 #include "dlib/pixel.h"
 #include "executorch/extension/module/module.h"
 #include "executorch/extension/tensor/tensor_ptr_maker.h"
 
-std::vector<std::array<float, EMBEDDING_DIM>> FaceEmbedder::computeFaceEmbedding(const std::vector<dlib::matrix<dlib::rgb_pixel>>& inputImages) {
-    std::vector<std::array<float, EMBEDDING_DIM>> outputEmbeddings;
+std::vector<Embedding> FaceEmbedder::computeFaceEmbedding(const std::vector<dlib::matrix<dlib::rgb_pixel>>& inputImages) {
+    std::vector<Embedding> outputEmbeddings;
 
     for (const auto& inputImage: inputImages) {
         dlib::matrix<dlib::rgb_pixel> resizedImage;
@@ -34,7 +34,7 @@ std::vector<std::array<float, EMBEDDING_DIM>> FaceEmbedder::computeFaceEmbedding
         if (result.ok()) {
             const auto outputTensor = result.get().at(0).toTensor();
             const auto outputTensorFloatData = static_cast<const float*>(outputTensor.const_data_ptr());
-            std::array<float, EMBEDDING_DIM> embedding{};
+            Embedding embedding{};
             std::copy_n(outputTensorFloatData, EMBEDDING_DIM, embedding.begin());
             outputEmbeddings.push_back(embedding);
         }

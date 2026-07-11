@@ -2,7 +2,7 @@
 
 #include "NNQueryResult.h"
 
-void VectorIndex::loadRecordsFromFile() {
+void VectorIndex::readFromDisk() {
     std::ifstream inputStream(dbFilePath, std::ios::binary);
     if (!inputStream.is_open()) {
         loadedSuccessfully = true;
@@ -39,7 +39,7 @@ void VectorIndex::loadRecordsFromFile() {
     loadedSuccessfully = true;
 }
 
-void VectorIndex::writeRecordsToFile() const {
+void VectorIndex::writeToDisk() const {
     flatbuffers::FlatBufferBuilder builder(1024);
 
     std::vector<flatbuffers::Offset<VectorRecord>> recordOffsets;
@@ -71,16 +71,16 @@ void VectorIndex::writeRecordsToFile() const {
     }
 }
 
-float VectorIndex::computeNorm(const std::array<float, 512>& embedding) {
-    float sumSquares = 0.0f;
+double VectorIndex::computeNorm(const Embedding& embedding) {
+    double sumSquares = 0.0;
     for (const auto& element : embedding) {
         sumSquares += element * element;
     }
     return std::sqrt(sumSquares);
 }
 
-float VectorIndex::computeDotProduct(const std::array<float, EMBEDDING_DIM>& embedding1, const std::array<float, EMBEDDING_DIM>& embedding2) {
-    float dotProduct = 0.0f;
+double VectorIndex::computeDotProduct(const Embedding& embedding1, const Embedding& embedding2) {
+    double dotProduct = 0.0f;
     for (int i = 0; i < EMBEDDING_DIM; i++) {
         dotProduct += embedding1[i] * embedding2[i];
     }
@@ -90,7 +90,7 @@ float VectorIndex::computeDotProduct(const std::array<float, EMBEDDING_DIM>& emb
 VectorIndex::~VectorIndex() {
     if (loadedSuccessfully) {
         try {
-            writeRecordsToFile();
+            writeToDisk();
         } catch (...) {
             // Destructors shouldn't throw; swallow and let the caller
             // discover issues via an explicit save() if one is added.
@@ -98,7 +98,7 @@ VectorIndex::~VectorIndex() {
     }
 }
 
-void VectorIndex::insert(const std::string& personName, const std::array<float, 512>& embedding) {
+void VectorIndex::insert(const std::string& personName, const Embedding& embedding) {
     VectorRecordData record;
     record.vector = embedding;
     record.norm = computeNorm(embedding);
@@ -106,12 +106,12 @@ void VectorIndex::insert(const std::string& personName, const std::array<float, 
     records.push_back(std::move(record));
 }
 
-NNQueryResult VectorIndex::nearestNeighbor(const std::array<float, 512>& embedding) const {
-    const float n = computeNorm(embedding);
-    float maxCosineSimilarity = 0.0f;
+NNQueryResult VectorIndex::nearestNeighbor(const Embedding& embedding) const {
+    const double n = computeNorm(embedding);
+    double maxCosineSimilarity = 0.0f;
     std::string maxCosineSimilarityPersonName;
     for (const auto& record : records) {
-        float cosine = computeDotProduct(record.vector, embedding) / (n * record.norm);
+        double cosine = computeDotProduct(record.vector, embedding) / (n * record.norm);
         if (cosine > maxCosineSimilarity) {
             maxCosineSimilarity = cosine;
             maxCosineSimilarityPersonName = record.personName;

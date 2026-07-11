@@ -3,6 +3,7 @@
 
 #include "FaceEmbedder.h"
 #include "NNQueryResult.h"
+#include "Types.h"
 #include "dlib/geometry/rectangle.h"
 #include "schema/VectorRecords_generated.h"
 
@@ -14,8 +15,8 @@
 #include <vector>
 
 struct VectorRecordData {
-    std::array<float, EMBEDDING_DIM> vector{};
-    float norm = 0.0f;
+    Embedding vector{};
+    double norm = 0.0;
     std::string personName;
 };
 
@@ -24,22 +25,22 @@ class VectorIndex {
     std::vector<VectorRecordData> records;
     bool loadedSuccessfully = false;
 
-    void loadRecordsFromFile();
+    void readFromDisk();
 
-    void writeRecordsToFile() const;
+    void writeToDisk() const;
 
-    static float computeNorm(const std::array<float, EMBEDDING_DIM>& embedding);
+    static double computeNorm(const Embedding& embedding);
 
-    static float computeDotProduct(const std::array<float, EMBEDDING_DIM>& embedding1, const std::array<float, EMBEDDING_DIM>& embedding2);
+    static double computeDotProduct(const Embedding& embedding1, const Embedding& embedding2);
 
   public:
-    explicit VectorIndex(std::string dbFilePath) : dbFilePath(std::move(dbFilePath)) { this->loadRecordsFromFile(); }
+    explicit VectorIndex(std::string dbFilePath) : dbFilePath(std::move(dbFilePath)) { this->readFromDisk(); }
 
     ~VectorIndex();
 
-    void insert(const std::string& personName, const std::array<float, EMBEDDING_DIM>& embedding);
+    void insert(const std::string& personName, const Embedding& embedding);
 
-    NNQueryResult nearestNeighbor(const std::array<float, EMBEDDING_DIM>& embedding) const;
+    [[nodiscard]] NNQueryResult nearestNeighbor(const Embedding& embedding) const;
 
     [[nodiscard]] const std::vector<VectorRecordData>& getRecords() const;
 };

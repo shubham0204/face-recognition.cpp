@@ -1,6 +1,6 @@
 table VectorRecord {
-    vector: [float32];
-    norm: float32;
+    vector: [float64];
+    norm: float64;
     person_name: string;
 }
 

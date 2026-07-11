@@ -26,12 +26,8 @@ struct VectorRecord FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
     VT_NORM = 6,
     VT_PERSON_NAME = 8
   };
-  const ::flatbuffers::Vector<float> *vector() const {
-    return GetPointer<const ::flatbuffers::Vector<float> *>(VT_VECTOR);
-  }
-  float norm() const {
-    return GetField<float>(VT_NORM, 0.0f);
-  }
+  const ::flatbuffers::Vector<double>* vector() const { return GetPointer<const ::flatbuffers::Vector<double>*>(VT_VECTOR); }
+  double norm() const { return GetField<double>(VT_NORM, 0.0); }
   const ::flatbuffers::String *person_name() const {
     return GetPointer<const ::flatbuffers::String *>(VT_PERSON_NAME);
   }
@@ -39,8 +35,7 @@ struct VectorRecord FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_VECTOR) &&
            verifier.VerifyVector(vector()) &&
-           VerifyField<float>(verifier, VT_NORM, 4) &&
-           VerifyOffset(verifier, VT_PERSON_NAME) &&
+             VerifyField<double>(verifier, VT_NORM, 8) && VerifyOffset(verifier, VT_PERSON_NAME) &&
            verifier.VerifyString(person_name()) &&
            verifier.EndTable();
   }
@@ -50,12 +45,9 @@ struct VectorRecordBuilder {
   typedef VectorRecord Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
-  void add_vector(::flatbuffers::Offset<::flatbuffers::Vector<float>> vector) {
-    fbb_.AddOffset(VectorRecord::VT_VECTOR, vector);
+  void add_vector(::flatbuffers::Offset<::flatbuffers::Vector<double>> vector) { fbb_.AddOffset(VectorRecord::VT_VECTOR, vector);
   }
-  void add_norm(float norm) {
-    fbb_.AddElement<float>(VectorRecord::VT_NORM, norm, 0.0f);
-  }
+  void add_norm(double norm) { fbb_.AddElement<double>(VectorRecord::VT_NORM, norm, 0.0); }
   void add_person_name(::flatbuffers::Offset<::flatbuffers::String> person_name) {
     fbb_.AddOffset(VectorRecord::VT_PERSON_NAME, person_name);
   }
@@ -72,23 +64,21 @@ struct VectorRecordBuilder {
 
 inline ::flatbuffers::Offset<VectorRecord> CreateVectorRecord(
     ::flatbuffers::FlatBufferBuilder &_fbb,
-    ::flatbuffers::Offset<::flatbuffers::Vector<float>> vector = 0,
-    float norm = 0.0f,
-    ::flatbuffers::Offset<::flatbuffers::String> person_name = 0) {
+                                                              ::flatbuffers::Offset<::flatbuffers::Vector<double>> vector = 0, double norm = 0.0,
+                                                              ::flatbuffers::Offset<::flatbuffers::String> person_name = 0) {
   VectorRecordBuilder builder_(_fbb);
-  builder_.add_person_name(person_name);
   builder_.add_norm(norm);
+  builder_.add_person_name(person_name);
   builder_.add_vector(vector);
   return builder_.Finish();
 }
 
 inline ::flatbuffers::Offset<VectorRecord> CreateVectorRecordDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
-    const std::vector<float> *vector = nullptr,
-    float norm = 0.0f,
-    const char *person_name = nullptr) {
-  auto vector__ = vector ? _fbb.CreateVector<float>(*vector) : 0;
-  auto person_name__ = person_name ? _fbb.CreateString(person_name) : 0;
+                                                                    const std::vector<double>* vector = nullptr, double norm = 0.0,
+                                                                    const char *person_name = nullptr) {
+    auto vector__ = vector ? _fbb.CreateVector<double>(*vector) : 0;
+    auto person_name__ = person_name ? _fbb.CreateString(person_name) : 0;
   return CreateVectorRecord(
       _fbb,
       vector__,

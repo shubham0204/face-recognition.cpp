@@ -65,7 +65,7 @@ FaceRecognizerInternal::detectFacesAndComputeEmbeddings(const std::vector<dlib::
         std::copy_n(croppedFaces.begin(), croppedFaces.size(), std::back_inserter(croppedImages));
         std::copy_n(detectedFaces.begin(), detectedFaces.size(), std::back_inserter(boundingBoxes));
     }
-    const std::vector<std::array<float, EMBEDDING_DIM>> embeddings = faceEmbedder.computeFaceEmbedding(croppedImages);
+    const std::vector<Embedding> embeddings = faceEmbedder.computeFaceEmbedding(croppedImages);
     DetectedFaceEmbeddings detectedFaceEmbeddings;
     detectedFaceEmbeddings.embeddings = embeddings;
     if (returnBoundingBoxes) {

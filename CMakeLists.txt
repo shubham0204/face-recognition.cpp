@@ -42,6 +42,7 @@ add_library(facenet_vectorsearch SHARED
         include/FaceBoundingBox.h
         include/NNQueryResult.h
         src/FaceRecognizer.cpp
+        src/Types.h
 )
 target_link_libraries(
         facenet_vectorsearch
