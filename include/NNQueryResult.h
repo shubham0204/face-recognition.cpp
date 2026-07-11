@@ -6,7 +6,7 @@
 
 struct NNQueryResult {
     std::string personName;
-    float cosineSimilarity = 0.0f;
+    double cosineSimilarity = 0.0;
     FaceBoundingBox faceBoundingBox;
 };
 

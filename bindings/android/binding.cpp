@@ -14,10 +14,13 @@
     printf(__VA_ARGS__);                                                                                                                             \
     printf("\n");
 
+#define CLASS_PATH_FACE_BOUNDING_BOX "com/ml/shubham0204/facenet_android/domain/NativeFaceRecognitionModule$FaceBoundingBox"
+#define CLASS_PATH_NN_QUERY_RESULT "com/ml/shubham0204/facenet_android/domain/NativeFaceRecognitionModule$NNQueryResult"
+
 namespace {
 
 // The recognizer is process-wide; created once via createFaceRecognizer().
-std::unique_ptr<FaceRecognizer> g_recognizer;
+std::unique_ptr<FaceRecognizer> faceRecognizer;
 
 // ---------------------------------------------------------------------------
 // String helpers
@@ -46,13 +49,13 @@ std::string jstringToStdString(JNIEnv* env, jstring jStr) {
 // ---------------------------------------------------------------------------
 
 bool bitmapToIntBufferImage(JNIEnv* env, jobject bitmap, std::vector<int>& storage, IntBufferImage& outImage) {
-    jclass bitmapClass = env->GetObjectClass(bitmap);
-    jmethodID getWidthMethod = env->GetMethodID(bitmapClass, "getWidth", "()I");
-    jmethodID getHeightMethod = env->GetMethodID(bitmapClass, "getHeight", "()I");
-    jmethodID getPixelsMethod = env->GetMethodID(bitmapClass, "getPixels", "([IIIIIII)V");
+    const auto bitmapClass = env->GetObjectClass(bitmap);
+    const auto getWidthMethod = env->GetMethodID(bitmapClass, "getWidth", "()I");
+    const auto getHeightMethod = env->GetMethodID(bitmapClass, "getHeight", "()I");
+    const auto getPixelsMethod = env->GetMethodID(bitmapClass, "getPixels", "([IIIIIII)V");
 
-    const jint width = env->CallIntMethod(bitmap, getWidthMethod);
-    const jint height = env->CallIntMethod(bitmap, getHeightMethod);
+    const auto width = env->CallIntMethod(bitmap, getWidthMethod);
+    const auto height = env->CallIntMethod(bitmap, getHeightMethod);
     env->DeleteLocalRef(bitmapClass);
 
     if (width <= 0 || height <= 0) {
@@ -60,7 +63,7 @@ bool bitmapToIntBufferImage(JNIEnv* env, jobject bitmap, std::vector<int>& stora
         return false;
     }
 
-    jintArray pixelsArray = env->NewIntArray(width * height);
+    const auto pixelsArray = env->NewIntArray(width * height);
     if (pixelsArray == nullptr) {
         LOGE("Failed to allocate pixel array (%d x %d)", width, height);
         return false;
@@ -85,24 +88,17 @@ bool bitmapToIntBufferImage(JNIEnv* env, jobject bitmap, std::vector<int>& stora
     return true;
 }
 
-// ---------------------------------------------------------------------------
-// java.util.List<Bitmap> -> std::vector<IntBufferImage>
-//
-// `storages` holds the backing pixel buffers so their memory stays alive for
-// as long as `outImages` (whose IntBufferImage entries point into them) is used.
-// ---------------------------------------------------------------------------
-
 bool javaBitmapListToImages(JNIEnv* env, jobject listObj, std::vector<std::vector<int>>& storages, std::vector<IntBufferImage>& outImages) {
-    jclass listClass = env->GetObjectClass(listObj);
-    jmethodID sizeMethod = env->GetMethodID(listClass, "size", "()I");
-    jmethodID getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");
+    const auto listClass = env->GetObjectClass(listObj);
+    const auto sizeMethod = env->GetMethodID(listClass, "size", "()I");
+    const auto getMethod = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");
 
-    const jint count = env->CallIntMethod(listObj, sizeMethod);
+    const auto count = env->CallIntMethod(listObj, sizeMethod);
     storages.resize(count);
     outImages.resize(count);
 
     for (jint i = 0; i < count; ++i) {
-        auto bitmap = (jobject)env->CallObjectMethod(listObj, getMethod, i);
+        const auto bitmap = env->CallObjectMethod(listObj, getMethod, i);
         const bool ok = bitmapToIntBufferImage(env, bitmap, storages[i], outImages[i]);
         env->DeleteLocalRef(bitmap);
         if (!ok)
@@ -111,48 +107,42 @@ bool javaBitmapListToImages(JNIEnv* env, jobject listObj, std::vector<std::vecto
     return true;
 }
 
-// ---------------------------------------------------------------------------
-// NNQueryResult -> Kotlin NativeFaceRecognitionModule.NNQueryResult
-// FaceBoundingBox  -> Kotlin NativeFaceRecognitionModule.FaceBoundingBox
-// ---------------------------------------------------------------------------
-
 jobject buildFaceBoundingBox(JNIEnv* env, const FaceBoundingBox& box) {
-    jclass cls = env->FindClass("com/ml/shubham0204/facenet_android/domain/NativeFaceRecognitionModule$FaceBoundingBox");
-    jmethodID ctor = env->GetMethodID(cls, "<init>", "(JJJJ)V");
+    const auto cls = env->FindClass(CLASS_PATH_FACE_BOUNDING_BOX);
+    const auto ctor = env->GetMethodID(cls, "<init>", "(JJJJ)V");
     // Kotlin constructor order: top, left, right, bottom
-    jobject result = env->NewObject(cls, ctor, static_cast<jlong>(box.top), static_cast<jlong>(box.left), static_cast<jlong>(box.right),
-                                    static_cast<jlong>(box.bottom));
+    const auto result = env->NewObject(cls, ctor, static_cast<jlong>(box.top), static_cast<jlong>(box.left), static_cast<jlong>(box.right),
+                                       static_cast<jlong>(box.bottom));
     env->DeleteLocalRef(cls);
     return result;
 }
 
 jobject buildNNQueryResult(JNIEnv* env, const NNQueryResult& r) {
-    jclass cls = env->FindClass("com/ml/shubham0204/facenet_android/domain/NativeFaceRecognitionModule$NNQueryResult");
-    jmethodID ctor = env->GetMethodID(cls, "<init>",
-                                      "(Ljava/lang/String;Ljava/lang/String;"
-                                      "Lcom/ml/shubham0204/facenet_android/domain/NativeFaceRecognitionModule$FaceBoundingBox;)V");
+    const auto cls = env->FindClass(CLASS_PATH_NN_QUERY_RESULT);
+    const auto constructor = env->GetMethodID(cls, "<init>",
+                                              "(Ljava/lang/String;D;"
+                                              "Lcom/ml/shubham0204/facenet_android/domain/NativeFaceRecognitionModule$FaceBoundingBox;)V");
 
-    jstring personName = env->NewStringUTF(r.personName.c_str());
-    jstring cosineSimilarity = env->NewStringUTF(std::to_string(r.cosineSimilarity).c_str());
-    jobject boundingBox = buildFaceBoundingBox(env, r.faceBoundingBox);
+    const auto personName = env->NewStringUTF(r.personName.c_str());
+    const auto cosineSimilarity = static_cast<jdouble>(r.cosineSimilarity);
+    const auto boundingBox = buildFaceBoundingBox(env, r.faceBoundingBox);
 
-    jobject result = env->NewObject(cls, ctor, personName, cosineSimilarity, boundingBox);
+    const auto result = env->NewObject(cls, constructor, personName, cosineSimilarity, boundingBox);
 
     env->DeleteLocalRef(cls);
     env->DeleteLocalRef(personName);
-    env->DeleteLocalRef(cosineSimilarity);
     env->DeleteLocalRef(boundingBox);
     return result;
 }
 
 jobject buildResultList(JNIEnv* env, const std::vector<NNQueryResult>& results) {
-    jclass arrayListClass = env->FindClass("java/util/ArrayList");
-    jmethodID arrayListCtor = env->GetMethodID(arrayListClass, "<init>", "(I)V");
-    jmethodID addMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
+    const auto arrayListClass = env->FindClass("java/util/ArrayList");
+    const auto arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "(I)V");
+    const auto addMethod = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
 
-    jobject list = env->NewObject(arrayListClass, arrayListCtor, static_cast<jint>(results.size()));
+    const auto list = env->NewObject(arrayListClass, arrayListConstructor, static_cast<jint>(results.size()));
     for (const auto& r : results) {
-        jobject item = buildNNQueryResult(env, r);
+        const auto item = buildNNQueryResult(env, r);
         env->CallBooleanMethod(list, addMethod, item);
         env->DeleteLocalRef(item);
     }
@@ -171,8 +161,8 @@ extern "C" JNIEXPORT void JNICALL Java_com_ml_shubham0204_facenet_1android_domai
     const std::string dbPathStr = jstringToStdString(env, dbPath);
     const std::string modelPathStr = jstringToStdString(env, faceNetModelPath);
 
-    g_recognizer = createFaceRecognizer(dbPathStr, modelPathStr);
-    if (!g_recognizer) {
+    faceRecognizer = createFaceRecognizer(dbPathStr, modelPathStr);
+    if (!faceRecognizer) {
         LOGE("createFaceRecognizer returned null");
     }
 }
@@ -180,7 +170,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_ml_shubham0204_facenet_1android_domai
 extern "C" JNIEXPORT void JNICALL Java_com_ml_shubham0204_facenet_1android_domain_NativeFaceRecognitionModule_insert(JNIEnv* env, jobject /* thiz */,
                                                                                                                      jstring personName,
                                                                                                                      jobject images) {
-    if (!g_recognizer) {
+    if (!faceRecognizer) {
         LOGE("insert() called before createFaceRecognizer()");
         return;
     }
@@ -194,13 +184,13 @@ extern "C" JNIEXPORT void JNICALL Java_com_ml_shubham0204_facenet_1android_domai
         return;
     }
 
-    g_recognizer->insert(personNameStr, imageBuffers);
+    faceRecognizer->insert(personNameStr, imageBuffers);
 }
 
 extern "C" JNIEXPORT jobject JNICALL Java_com_ml_shubham0204_facenet_1android_domain_NativeFaceRecognitionModule_recognize(JNIEnv* env,
                                                                                                                            jobject /* thiz */,
                                                                                                                            jobject image) {
-    if (!g_recognizer) {
+    if (!faceRecognizer) {
         LOGE("recognize() called before createFaceRecognizer()");
         return buildResultList(env, {});
     }
@@ -212,6 +202,6 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_ml_shubham0204_facenet_1android_do
         return buildResultList(env, {});
     }
 
-    const std::vector<NNQueryResult> results = g_recognizer->recognize(nativeImage);
+    const std::vector<NNQueryResult> results = faceRecognizer->recognize(nativeImage);
     return buildResultList(env, results);
 }
