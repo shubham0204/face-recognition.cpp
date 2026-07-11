@@ -7,7 +7,7 @@
 TEST(VectorDBTests, CreateInsertReadDelete) {
     deleteResource(VECTORDB_FILE_NAME);
     VectorIndex index(getResourcePath(VECTORDB_FILE_NAME));
-    index.insert(std::string("HelloWorld"), std::array<float, EMBEDDING_DIM>{});
+    index.insert(std::string("HelloWorld"), Embedding{});
     const auto records = index.getRecords();
     EXPECT_EQ(records.size(), 1);
     EXPECT_EQ(records[0].personName, "HelloWorld");

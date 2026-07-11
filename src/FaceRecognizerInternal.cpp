@@ -4,7 +4,7 @@
 #include "FaceDetector.h"
 #include "Utils.h"
 
-void FaceRecognizerInternal::insert(const std::string& personName, const std::vector<dlib::matrix<dlib::rgb_pixel>>& images) {
+void FaceRecognizerInternal::insert(const std::string& personName, const std::vector<DlibRgbImage>& images) {
     const auto faceDetectionResult = this->detectFacesAndComputeEmbeddings(images, false);
     if (!faceDetectionResult.has_value()) {
         return;
@@ -15,7 +15,7 @@ void FaceRecognizerInternal::insert(const std::string& personName, const std::ve
 }
 
 void FaceRecognizerInternal::insert(const std::string& personName, const std::vector<std::string>& imageFilePaths) {
-    std::vector<dlib::matrix<dlib::rgb_pixel>> dlibMatrixImages;
+    std::vector<DlibRgbImage> dlibMatrixImages;
     dlibMatrixImages.reserve(imageFilePaths.size());
     for (const auto& filePath : imageFilePaths) {
         dlibMatrixImages.push_back(Utils::loadImageFromFile(filePath));
@@ -24,7 +24,7 @@ void FaceRecognizerInternal::insert(const std::string& personName, const std::ve
 }
 
 void FaceRecognizerInternal::insert(const std::string& personName, const std::vector<IntBufferImage>& images) {
-    std::vector<dlib::matrix<dlib::rgb_pixel>> dlibMatrixImages;
+    std::vector<DlibRgbImage> dlibMatrixImages;
     dlibMatrixImages.reserve(images.size());
     for (const auto& [buffer, width, height] : images) {
         dlibMatrixImages.push_back(Utils::loadImageFromIntBuffer(buffer, width, height));
@@ -39,7 +39,7 @@ std::vector<NNQueryResult> FaceRecognizerInternal::recognize(const IntBufferImag
     return this->recognize(Utils::loadImageFromIntBuffer(image.buffer, image.width, image.height));
 }
 
-std::vector<NNQueryResult> FaceRecognizerInternal::recognize(const dlib::matrix<dlib::rgb_pixel>& image) {
+std::vector<NNQueryResult> FaceRecognizerInternal::recognize(const DlibRgbImage& image) {
     const auto images = {image};
     const auto faceDetectionResult = detectFacesAndComputeEmbeddings(images, true);
     std::vector<NNQueryResult> results;
@@ -56,8 +56,9 @@ std::vector<NNQueryResult> FaceRecognizerInternal::recognize(const dlib::matrix<
 }
 
 std::optional<DetectedFaceEmbeddings>
-FaceRecognizerInternal::detectFacesAndComputeEmbeddings(const std::vector<dlib::matrix<dlib::rgb_pixel>>& images, const bool returnBoundingBoxes) {
-    std::vector<dlib::matrix<dlib::rgb_pixel>> croppedImages;
+FaceRecognizerInternal::detectFacesAndComputeEmbeddings(const std::vector<DlibRgbImage>& images,
+                                                                                              const bool returnBoundingBoxes) {
+    std::vector<DlibRgbImage> croppedImages;
     std::vector<dlib::rectangle> boundingBoxes;
     for (const auto& image : images) {
         const auto detectedFaces = faceDetector.detectFaces(image);

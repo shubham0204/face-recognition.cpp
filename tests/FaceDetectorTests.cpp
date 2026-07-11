@@ -5,7 +5,7 @@
 
 TEST(FaceDetectorSmokeTests, LoadImage) {
     const auto imageFilePath = getResourcePath("img.png");
-    dlib::matrix<dlib::rgb_pixel> inputImage;
+    DlibRgbImage inputImage;
     dlib::load_png(inputImage, imageFilePath);
     EXPECT_EQ(inputImage.nr(), 493);
     EXPECT_EQ(inputImage.nc(), 740);
@@ -13,7 +13,7 @@ TEST(FaceDetectorSmokeTests, LoadImage) {
 
 TEST(FaceDetectorSmokeTests, DetectFaces) {
     const auto imageFilePath = getResourcePath("img.png");
-    dlib::matrix<dlib::rgb_pixel> inputImage;
+    DlibRgbImage inputImage;
     dlib::load_png(inputImage, imageFilePath);
 
     FaceDetector faceDetector;
@@ -23,7 +23,7 @@ TEST(FaceDetectorSmokeTests, DetectFaces) {
 
 TEST(FaceDetectorSmokeTests, CropFaces) {
     const auto imageFilePath = getResourcePath("img.png");
-    dlib::matrix<dlib::rgb_pixel> inputImage;
+    DlibRgbImage inputImage;
     dlib::load_png(inputImage, imageFilePath);
 
     FaceDetector faceDetector;

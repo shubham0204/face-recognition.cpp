@@ -7,11 +7,11 @@
 #include "executorch/extension/module/module.h"
 #include "executorch/extension/tensor/tensor_ptr_maker.h"
 
-std::vector<Embedding> FaceEmbedder::computeFaceEmbedding(const std::vector<dlib::matrix<dlib::rgb_pixel>>& inputImages) {
+std::vector<Embedding> FaceEmbedder::computeFaceEmbedding(const std::vector<DlibRgbImage>& inputImages) {
     std::vector<Embedding> outputEmbeddings;
 
     for (const auto& inputImage: inputImages) {
-        dlib::matrix<dlib::rgb_pixel> resizedImage;
+        DlibRgbImage resizedImage;
         dlib::set_image_size(resizedImage, INPUT_IMG_DIM, INPUT_IMG_DIM);
         resize_image(inputImage, resizedImage);
 

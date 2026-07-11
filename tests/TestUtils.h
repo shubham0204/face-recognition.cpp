@@ -19,8 +19,8 @@ inline void deleteResource(const std::string& filename) {
     std::filesystem::remove(getResourcePath(filename));
 }
 
-inline std::array<float, EMBEDDING_DIM> createRandomEmbedding() {
-    std::array<float, EMBEDDING_DIM> embedding{};
+inline Embedding createRandomEmbedding() {
+    Embedding embedding{};
     for (int i = 0; i < EMBEDDING_DIM; i++) {
         embedding[i] = drand48() / static_cast<double>(RAND_MAX);
     }

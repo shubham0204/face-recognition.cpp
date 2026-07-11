@@ -7,7 +7,7 @@
 
 TEST(FaceEmbedderSmokeTests, CreateEmbeddings) {
     const auto imageFilePath = getResourcePath("img.png");
-    dlib::matrix<dlib::rgb_pixel> inputImage;
+    DlibRgbImage inputImage;
     dlib::load_png(inputImage, imageFilePath);
 
     FaceDetector faceDetector;
@@ -18,9 +18,9 @@ TEST(FaceEmbedderSmokeTests, CreateEmbeddings) {
     for (const auto& face : faces) {
         chipDetails.emplace_back(face);
     }
-    dlib::array<dlib::matrix<dlib::rgb_pixel>> croppedImagesArray(chipDetails.size());
+    dlib::array<DlibRgbImage> croppedImagesArray(chipDetails.size());
     dlib::extract_image_chips(inputImage, chipDetails, croppedImagesArray);
-    std::vector<dlib::matrix<dlib::rgb_pixel>> croppedImages;
+    std::vector<DlibRgbImage> croppedImages;
     for (const auto& face : croppedImagesArray) {
         croppedImages.push_back(face);
     }

@@ -14,7 +14,7 @@ class FaceEmbedder {
   public:
     explicit FaceEmbedder(const std::string& modelFilePath) : faceNetModule(modelFilePath) {};
 
-    std::vector<Embedding> computeFaceEmbedding(const std::vector<dlib::matrix<dlib::rgb_pixel>>& inputImages);
+    std::vector<Embedding> computeFaceEmbedding(const std::vector<DlibRgbImage>& inputImages);
 };
 
 #endif // FACENET_VECTORSEARCH_FACEEMBEDDER_H

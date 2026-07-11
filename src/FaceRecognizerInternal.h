@@ -17,12 +17,11 @@ class FaceRecognizerInternal : public FaceRecognizer {
     FaceEmbedder faceEmbedder;
     VectorIndex vectorIndex;
 
-    std::optional<DetectedFaceEmbeddings> detectFacesAndComputeEmbeddings(const std::vector<dlib::matrix<dlib::rgb_pixel>>& images,
-                                                                          bool returnBoundingBoxes = false);
+    std::optional<DetectedFaceEmbeddings> detectFacesAndComputeEmbeddings(const std::vector<DlibRgbImage>& images, bool returnBoundingBoxes = false);
 
-    void insert(const std::string& personName, const std::vector<dlib::matrix<dlib::rgb_pixel>>& images);
+    void insert(const std::string& personName, const std::vector<DlibRgbImage>& images);
 
-    std::vector<NNQueryResult> recognize(const dlib::matrix<dlib::rgb_pixel>& image);
+    std::vector<NNQueryResult> recognize(const DlibRgbImage& image);
 
   public:
     explicit FaceRecognizerInternal(const std::string& dbFilePath, const std::string& faceNetModelPath)

@@ -6,14 +6,14 @@
 
 class Utils {
   public:
-    static dlib::matrix<dlib::rgb_pixel> loadImageFromFile(const std::string& filePath) {
-        dlib::matrix<dlib::rgb_pixel> image;
+    static DlibRgbImage loadImageFromFile(const std::string& filePath) {
+        DlibRgbImage image;
         dlib::load_image(image, filePath);
         return image;
     }
 
-    static dlib::matrix<dlib::rgb_pixel> loadImageFromIntBuffer(const int* buffer, int width, int height) {
-        dlib::matrix<dlib::rgb_pixel> image(width, height);
+    static DlibRgbImage loadImageFromIntBuffer(const int* buffer, int width, int height) {
+        DlibRgbImage image(width, height);
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 dlib::rgb_pixel pixel;
