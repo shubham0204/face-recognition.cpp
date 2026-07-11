@@ -40,17 +40,16 @@ std::vector<NNQueryResult> FaceRecognizerInternal::recognize(const IntBufferImag
 }
 
 std::vector<NNQueryResult> FaceRecognizerInternal::recognize(const DlibRgbImage& image) {
-    const auto images = {image};
-    const auto faceDetectionResult = detectFacesAndComputeEmbeddings(images, true);
-    std::vector<NNQueryResult> results;
+    const auto faceDetectionResult = detectFacesAndComputeEmbeddings({image}, true);
     if (!faceDetectionResult.has_value()) {
-        return results;
+        return {};
     }
     const auto [embeddings, faceBoundingBoxes] = faceDetectionResult.value();
+    std::vector<NNQueryResult> results(embeddings.size());
     for (int i = 0; i < embeddings.size(); i++) {
         auto nnResult = vectorIndex.nearestNeighbor(embeddings[i]);
         nnResult.faceBoundingBox = Utils::fromDlibRectangle(faceBoundingBoxes[i]);
-        results.push_back(nnResult);
+        results[i] = nnResult;
     }
     return results;
 }
@@ -73,4 +72,4 @@ FaceRecognizerInternal::detectFacesAndComputeEmbeddings(const std::vector<DlibRg
         detectedFaceEmbeddings.faceBoundingBoxes = boundingBoxes;
     }
     return detectedFaceEmbeddings;
-}
+};
