@@ -27,4 +27,13 @@ inline Embedding createRandomEmbedding() {
     return embedding;
 }
 
+inline double l2Norm(const Embedding& e1, const Embedding& e2) {
+    double l2Distance = 0.0;
+    for (int i = 0; i < EMBEDDING_DIM; i++) {
+        l2Distance += pow(e1[i] - e2[i], 2);
+    }
+    l2Distance = sqrt(l2Distance);
+    return l2Distance;
+}
+
 #endif // FACENET_VECTORSEARCH_HELPER_H
