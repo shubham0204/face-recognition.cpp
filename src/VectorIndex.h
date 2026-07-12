@@ -43,6 +43,10 @@ class VectorIndex {
     [[nodiscard]] NNQueryResult nearestNeighbor(const Embedding& embedding) const;
 
     [[nodiscard]] const std::vector<VectorRecordData>& getRecords() const;
+
+    bool remove(const std::string& personName);
+
+    void clear();
 };
 
 #endif // FACENET_VECTORSEARCH_VECTORDB_H

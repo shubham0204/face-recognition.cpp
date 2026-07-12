@@ -19,6 +19,10 @@ class FaceRecognizer {
     virtual std::vector<NNQueryResult> recognize(const std::string& imageFilePath) = 0;
 
     virtual std::vector<NNQueryResult> recognize(const IntBufferImage& image) = 0;
+
+    virtual bool remove(const std::string& personName) = 0;
+
+    virtual void clear() = 0;
 };
 
 std::unique_ptr<FaceRecognizer> createFaceRecognizer(const std::string& dbFilePath, const std::string& faceNetModelPath);

@@ -28,3 +28,23 @@ TEST(VectorDBTests, NearestNeighbor) {
     EXPECT_TRUE(personName.starts_with("Person"));
     EXPECT_TRUE(-1 < cosineSimilarity && cosineSimilarity < 1);
 }
+
+TEST(VectorDBTests, DeleteRecords) {
+    deleteResource(VECTORDB_FILE_NAME);
+    VectorIndex index(getResourcePath(VECTORDB_FILE_NAME));
+
+    for (int i = 0; i < 10; i++) {
+        index.insert(std::format("Person{}", i + 1), createRandomEmbedding());
+    }
+    const auto records1 = index.getRecords();
+    EXPECT_EQ(records1.size(), 10);
+
+    index.remove("Person1");
+    index.remove("Person2");
+    const auto records2 = index.getRecords();
+    EXPECT_EQ(records2.size(), 8);
+
+    index.clear();
+    const auto records3 = index.getRecords();
+    EXPECT_EQ(records3.size(), 0);
+}

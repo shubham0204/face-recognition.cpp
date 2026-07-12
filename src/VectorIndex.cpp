@@ -125,3 +125,10 @@ NNQueryResult VectorIndex::nearestNeighbor(const Embedding& embedding) const {
 }
 
 const std::vector<VectorRecordData>& VectorIndex::getRecords() const { return records; }
+
+bool VectorIndex::remove(const std::string& personName) {
+    const auto deletedRecords = std::erase_if(records, [personName](const auto& record) { return record.personName == personName; });
+    return deletedRecords > 0;
+}
+
+void VectorIndex::clear() { this->records.clear(); }

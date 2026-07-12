@@ -34,6 +34,10 @@ class FaceRecognizerInternal : public FaceRecognizer {
     std::vector<NNQueryResult> recognize(const std::string& imageFilePath) override;
 
     std::vector<NNQueryResult> recognize(const IntBufferImage& image) override;
+
+    bool remove(const std::string& personName) override;
+
+    void clear() override;
 };
 
 #endif // FACENET_VECTORSEARCH_FACERECOGNIZER_H

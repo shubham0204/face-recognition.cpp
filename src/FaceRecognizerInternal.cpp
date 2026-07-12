@@ -39,6 +39,10 @@ std::vector<NNQueryResult> FaceRecognizerInternal::recognize(const IntBufferImag
     return this->recognize(Utils::loadImageFromIntBuffer(image.buffer, image.width, image.height));
 }
 
+bool FaceRecognizerInternal::remove(const std::string& personName) { return this->vectorIndex.remove(personName); }
+
+void FaceRecognizerInternal::clear() { return this->vectorIndex.clear(); }
+
 std::vector<NNQueryResult> FaceRecognizerInternal::recognize(const DlibRgbImage& image) {
     const auto faceDetectionResult = detectFacesAndComputeEmbeddings({image}, true);
     if (!faceDetectionResult.has_value()) {
