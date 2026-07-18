@@ -120,7 +120,7 @@ jobject buildFaceBoundingBox(JNIEnv* env, const FaceBoundingBox& box) {
 jobject buildNNQueryResult(JNIEnv* env, const NNQueryResult& r) {
     const auto cls = env->FindClass(CLASS_PATH_NN_QUERY_RESULT);
     const auto constructor = env->GetMethodID(cls, "<init>",
-                                              "(Ljava/lang/String;D;"
+                                              "(Ljava/lang/String;D"
                                               "Lcom/ml/shubham0204/facenet_android/domain/NativeFaceRecognitionModule$FaceBoundingBox;)V");
 
     const auto personName = env->NewStringUTF(r.personName.c_str());
