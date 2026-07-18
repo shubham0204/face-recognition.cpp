@@ -187,6 +187,16 @@ extern "C" JNIEXPORT void JNICALL Java_com_ml_shubham0204_facenet_1android_domai
     faceRecognizer->insert(personNameStr, imageBuffers);
 }
 
+extern "C" JNIEXPORT jboolean JNICALL Java_com_ml_shubham0204_facenet_1android_domain_NativeFaceRecognitionModule_remove(JNIEnv* env, jobject,
+                                                                                                                         jstring personName) {
+    const std::string personNameStr = jstringToStdString(env, personName);
+    return faceRecognizer->remove(personNameStr);
+}
+
+extern "C" JNIEXPORT void JNICALL Java_com_ml_shubham0204_facenet_1android_domain_NativeFaceRecognitionModule_clear(JNIEnv* env, jobject) {
+    faceRecognizer->clear();
+}
+
 extern "C" JNIEXPORT jobject JNICALL Java_com_ml_shubham0204_facenet_1android_domain_NativeFaceRecognitionModule_recognize(JNIEnv* env,
                                                                                                                            jobject /* thiz */,
                                                                                                                            jobject image) {
