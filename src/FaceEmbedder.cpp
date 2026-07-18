@@ -1,5 +1,6 @@
 #include "FaceEmbedder.h"
 
+#include "Logger.h"
 #include "Types.h"
 #include "dlib/image_transforms/interpolation.h"
 #include "dlib/matrix/matrix.h"
@@ -30,7 +31,7 @@ std::vector<Embedding> FaceEmbedder::computeFaceEmbedding(const std::vector<Dlib
         const executorch::runtime::Result<std::vector<executorch::runtime::EValue>> result = faceNetModule.forward(inputTensor);
 
         if (!result.ok()) {
-            std::cerr << to_string(result.error()) << '\n';
+            Logger::log(to_string(result.error()));
         }
         if (result.ok()) {
             const auto outputTensor = result.get().at(0).toTensor();

@@ -2,6 +2,7 @@
 
 #include "DetectedFaceEmbeddings.h"
 #include "FaceDetector.h"
+#include "Logger.h"
 #include "Utils.h"
 
 void FaceRecognizerInternal::insert(const std::string& personName, const std::vector<DlibRgbImage>& images) {
@@ -46,6 +47,7 @@ void FaceRecognizerInternal::clear() { return this->vectorIndex.clear(); }
 std::vector<NNQueryResult> FaceRecognizerInternal::recognize(const DlibRgbImage& image) {
     const auto faceDetectionResult = detectFacesAndComputeEmbeddings({image}, true);
     if (!faceDetectionResult.has_value()) {
+        Logger::log("No face detection results found");
         return {};
     }
     const auto [embeddings, faceBoundingBoxes] = faceDetectionResult.value();

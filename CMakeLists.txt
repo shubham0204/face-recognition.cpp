@@ -6,6 +6,9 @@ set(CMAKE_CXX_STANDARD 23)
 option(BUILD_EXAMPLES "Build examples" OFF)
 option(BUILD_JNI_BINDING "Build JNI binding" OFF)
 option(BUILD_TESTS "Build unit tests" OFF)
+if (ANDROID_NDK)
+    set(IS_ANDROID 1)
+endif ()
 
 # ============= External Dependencies =============
 # ExecuTorch (ML runtime)
@@ -43,6 +46,7 @@ add_library(facenet_vectorsearch SHARED
         include/NNQueryResult.h
         src/FaceRecognizer.cpp
         src/Types.h
+        src/Logger.h
 )
 target_link_libraries(
         facenet_vectorsearch
@@ -54,6 +58,19 @@ target_link_libraries(
         extension_module
         dlib::dlib
 )
+if (IS_ANDROID)
+    message(STATUS "Linking Android log library...")
+    target_compile_definitions(
+            facenet_vectorsearch
+            PRIVATE
+            IS_ANDROID=${IS_ANDROID}
+    )
+    target_link_libraries(
+            facenet_vectorsearch
+            PRIVATE
+            log
+    )
+endif ()
 include_directories(include)
 
 # ============ Project components =============
