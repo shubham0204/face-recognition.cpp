@@ -48,3 +48,22 @@ TEST(VectorDBTests, DeleteRecords) {
     const auto records3 = index.getRecords();
     EXPECT_EQ(records3.size(), 0);
 }
+
+TEST(VectorDBTests, VerifyScheduledDiskWrites) {
+    deleteResource(VECTORDB_FILE_NAME);
+
+    VectorIndex index(getResourcePath(VECTORDB_FILE_NAME));
+    for (int i = 0; i < 10; i++) {
+        index.insert(std::format("Person{}", i + 1), createRandomEmbedding());
+    }
+    const auto records1 = index.getRecords();
+    EXPECT_EQ(records1.size(), 10);
+    std::this_thread::sleep_for(std::chrono::seconds(VectorIndex::WRITE_INTERVAL_IN_SECONDS + 2));
+
+    // We expect that `index` has already written the records to disk
+    // as we waited for VectorIndex::WRITE_INTERVAL_IN_SECONDS + 2
+    // Constructing another index on the same disk file should contain the same
+    // number of records as that of `index`
+    VectorIndex index2(getResourcePath(VECTORDB_FILE_NAME));
+    EXPECT_EQ(index2.getRecords().size(), 10);
+}

@@ -11,6 +11,7 @@
 #include <array>
 #include <fstream>
 #include <string>
+#include <thread>
 #include <utility>
 #include <vector>
 
@@ -25,16 +26,29 @@ class VectorIndex {
     std::vector<VectorRecordData> records;
     bool loadedSuccessfully = false;
 
+    bool isMemoryCopyDirty = false;
+    std::atomic<bool> isWriteToDiskScheduled = false;
+    std::thread writeToDiskThread;
+
     void readFromDisk();
 
-    void writeToDisk() const;
+    void writeToDisk();
 
     static double computeNorm(const Embedding& embedding);
 
     static double computeDotProduct(const Embedding& embedding1, const Embedding& embedding2);
 
+    void scheduleWriteToDisk();
+
+    void descheduleWriteToDisk();
+
   public:
-    explicit VectorIndex(std::string dbFilePath) : dbFilePath(std::move(dbFilePath)) { this->readFromDisk(); }
+    static constexpr int WRITE_INTERVAL_IN_SECONDS = 10;
+
+    explicit VectorIndex(std::string dbFilePath) : dbFilePath(std::move(dbFilePath)) {
+        this->readFromDisk();
+        this->scheduleWriteToDisk();
+    }
 
     ~VectorIndex();
 

@@ -2,6 +2,8 @@
 
 #include "NNQueryResult.h"
 
+#include <thread>
+
 void VectorIndex::readFromDisk() {
     std::ifstream inputStream(dbFilePath, std::ios::binary);
     if (!inputStream.is_open()) {
@@ -37,9 +39,10 @@ void VectorIndex::readFromDisk() {
     }
 
     loadedSuccessfully = true;
+    this->isMemoryCopyDirty = false;
 }
 
-void VectorIndex::writeToDisk() const {
+void VectorIndex::writeToDisk() {
     flatbuffers::FlatBufferBuilder builder(1024);
 
     std::vector<flatbuffers::Offset<VectorRecord>> recordOffsets;
@@ -69,6 +72,8 @@ void VectorIndex::writeToDisk() const {
     if (std::rename(tmpPath.c_str(), dbFilePath.c_str()) != 0) {
         throw std::runtime_error("Failed to finalize vector DB file: " + dbFilePath);
     }
+
+    this->isMemoryCopyDirty = false;
 }
 
 double VectorIndex::computeNorm(const Embedding& embedding) {
@@ -87,14 +92,35 @@ double VectorIndex::computeDotProduct(const Embedding& embedding1, const Embeddi
     return dotProduct;
 }
 
-VectorIndex::~VectorIndex() {
-    if (loadedSuccessfully) {
-        try {
-            writeToDisk();
-        } catch (...) {
-            // Destructors shouldn't throw; swallow and let the caller
-            // discover issues via an explicit save() if one is added.
+void VectorIndex::scheduleWriteToDisk() {
+    if (isWriteToDiskScheduled) {
+        return;
+    }
+    isWriteToDiskScheduled = true;
+    this->writeToDiskThread = std::thread([this] {
+        while (isWriteToDiskScheduled) {
+            if (isMemoryCopyDirty) {
+                writeToDisk();
+            }
+            std::this_thread::sleep_for(std::chrono::seconds(VectorIndex::WRITE_INTERVAL_IN_SECONDS));
         }
+    });
+}
+
+void VectorIndex::descheduleWriteToDisk() {
+    if (!isWriteToDiskScheduled) {
+        return;
+    }
+    isWriteToDiskScheduled = false;
+    if (this->writeToDiskThread.joinable()) {
+        this->writeToDiskThread.join();
+    }
+}
+
+VectorIndex::~VectorIndex() {
+    descheduleWriteToDisk();
+    if (loadedSuccessfully && isMemoryCopyDirty) {
+        writeToDisk();
     }
 }
 
@@ -104,6 +130,7 @@ void VectorIndex::insert(const std::string& personName, const Embedding& embeddi
     record.norm = computeNorm(embedding);
     record.personName = personName;
     records.push_back(std::move(record));
+    this->isMemoryCopyDirty = true;
 }
 
 NNQueryResult VectorIndex::nearestNeighbor(const Embedding& embedding) const {
@@ -127,8 +154,12 @@ NNQueryResult VectorIndex::nearestNeighbor(const Embedding& embedding) const {
 const std::vector<VectorRecordData>& VectorIndex::getRecords() const { return records; }
 
 bool VectorIndex::remove(const std::string& personName) {
-    const auto deletedRecords = std::erase_if(records, [personName](const auto& record) { return record.personName == personName; });
-    return deletedRecords > 0;
+    const auto numDeletedRecords = std::erase_if(records, [personName](const auto& record) { return record.personName == personName; });
+    this->isMemoryCopyDirty = numDeletedRecords > 0;
+    return this->isMemoryCopyDirty;
 }
 
-void VectorIndex::clear() { this->records.clear(); }
+void VectorIndex::clear() {
+    this->records.clear();
+    this->isMemoryCopyDirty = true;
+}
