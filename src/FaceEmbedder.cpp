@@ -11,12 +11,11 @@
 std::vector<Embedding> FaceEmbedder::computeFaceEmbedding(const std::vector<DlibRgbImage>& inputImages) {
     std::vector<Embedding> outputEmbeddings;
     outputEmbeddings.reserve(inputImages.size());
+    DlibRgbImage resizedImage;
+    dlib::set_image_size(resizedImage, INPUT_IMG_DIM, INPUT_IMG_DIM);
     for (const auto& inputImage : inputImages) {
-        DlibRgbImage resizedImage;
-        dlib::set_image_size(resizedImage, INPUT_IMG_DIM, INPUT_IMG_DIM);
         resize_image(inputImage, resizedImage);
 
-        std::vector<float> pixelFloatData(INPUT_IMG_DIM * INPUT_IMG_DIM * 3);
         for (int row = 0; row < INPUT_IMG_DIM; row++) {
             for (int col = 0; col < INPUT_IMG_DIM; col++) {
                 const dlib::rgb_pixel& pixel = resizedImage(row, col);
