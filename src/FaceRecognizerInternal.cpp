@@ -74,7 +74,7 @@ FaceRecognizerInternal::detectFacesAndComputeEmbeddings(const std::vector<DlibRg
     const std::vector<Embedding> embeddings = faceEmbedder.computeFaceEmbedding(croppedImages);
     DetectedFaceEmbeddings detectedFaceEmbeddings;
     detectedFaceEmbeddings.embeddings = embeddings;
-    if (returnBoundingBoxes) {
+    if (returnBoundingBoxes) [[likely]] {
         detectedFaceEmbeddings.faceBoundingBoxes = boundingBoxes;
     }
     return detectedFaceEmbeddings;

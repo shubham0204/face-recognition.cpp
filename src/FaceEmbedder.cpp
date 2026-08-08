@@ -29,10 +29,10 @@ std::vector<Embedding> FaceEmbedder::computeFaceEmbedding(const std::vector<Dlib
         auto inputTensor = executorch::extension::from_blob(resizedImagePixelData.data(), {1, INPUT_IMG_DIM, INPUT_IMG_DIM, 3});
         const executorch::runtime::Result<std::vector<executorch::runtime::EValue>> result = faceNetModule.forward(inputTensor);
 
-        if (!result.ok()) {
+        if (!result.ok()) [[unlikely]] {
             Logger::log(to_string(result.error()));
         }
-        if (result.ok()) {
+        if (result.ok()) [[likely]] {
             const auto outputTensor = result.get().at(0).toTensor();
             const auto outputTensorFloatData = static_cast<const float*>(outputTensor.const_data_ptr());
             Embedding embedding{};
