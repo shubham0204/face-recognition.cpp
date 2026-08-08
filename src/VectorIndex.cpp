@@ -136,7 +136,6 @@ void VectorIndex::insert(const std::string& personName, const Embedding& embeddi
 NNQueryResult VectorIndex::nearestNeighbor(const Embedding& embedding) const {
     const double n = computeNorm(embedding);
     double maxCosineSimilarity = -std::numeric_limits<double>::infinity();
-    ;
     std::string maxCosineSimilarityPersonName;
     for (const auto& record : records) {
         double cosine = computeDotProduct(record.vector, embedding) / (n * record.norm);
