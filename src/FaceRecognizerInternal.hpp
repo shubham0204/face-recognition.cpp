@@ -1,11 +1,11 @@
 #ifndef FACENET_VECTORSEARCH_FACERECOGNIZER_H
 #define FACENET_VECTORSEARCH_FACERECOGNIZER_H
-#include "../include/IntBufferImage.h"
-#include "../include/NNQueryResult.h"
-#include "DetectedFaceEmbeddings.h"
-#include "FaceDetector.h"
-#include "FaceRecognizer.h"
-#include "VectorIndex.h"
+#include "../include/IntBufferImage.hpp"
+#include "../include/NNQueryResult.hpp"
+#include "DetectedFaceEmbeddings.hpp"
+#include "FaceDetector.hpp"
+#include "FaceRecognizer.hpp"
+#include "VectorIndex.hpp"
 #include "dlib/matrix/matrix.h"
 #include "dlib/pixel.h"
 

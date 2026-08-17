@@ -1,9 +1,9 @@
-#include "FaceRecognizerInternal.h"
+#include "FaceRecognizerInternal.hpp"
 
-#include "DetectedFaceEmbeddings.h"
-#include "FaceDetector.h"
-#include "Logger.h"
-#include "Utils.h"
+#include "DetectedFaceEmbeddings.hpp"
+#include "FaceDetector.hpp"
+#include "Logger.hpp"
+#include "Utils.hpp"
 
 void FaceRecognizerInternal::insert(const std::string& personName, const std::vector<DlibRgbImage>& images) {
     const auto faceDetectionResult = this->detectFacesAndComputeEmbeddings(images, false);

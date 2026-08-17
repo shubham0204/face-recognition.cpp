@@ -1,7 +1,7 @@
-#include "FaceEmbedder.h"
+#include "FaceEmbedder.hpp"
 
-#include "Logger.h"
-#include "Types.h"
+#include "Logger.hpp"
+#include "Types.hpp"
 #include "dlib/image_transforms/interpolation.h"
 #include "dlib/matrix/matrix.h"
 #include "dlib/pixel.h"

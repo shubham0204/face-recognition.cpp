@@ -1,5 +1,5 @@
-#include "FaceDetector.h"
-#include "TestUtils.h"
+#include "FaceDetector.hpp"
+#include "TestUtils.hpp"
 #include <dlib/image_io.h>
 #include <gtest/gtest.h>
 

@@ -1,9 +1,9 @@
 #ifndef FACENET_VECTORSEARCH_VECTORDB_H
 #define FACENET_VECTORSEARCH_VECTORDB_H
 
-#include "FaceEmbedder.h"
-#include "NNQueryResult.h"
-#include "Types.h"
+#include "FaceEmbedder.hpp"
+#include "NNQueryResult.hpp"
+#include "Types.hpp"
 #include "dlib/geometry/rectangle.h"
 #include "schema/VectorRecords_generated.h"
 

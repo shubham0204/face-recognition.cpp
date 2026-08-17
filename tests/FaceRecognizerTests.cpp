@@ -1,10 +1,10 @@
-#include "../src/FaceRecognizerInternal.h"
-#include "TestUtils.h"
-#include "VectorIndex.h"
+#include "../src/FaceRecognizerInternal.hpp"
+#include "TestUtils.hpp"
+#include "VectorIndex.hpp"
 #include <gtest/gtest.h>
 
 #define VECTORDB_FILE_NAME "vectordb.bin"
-#define FACENET_MODEL_FILE_NAME "model.pte"
+#define FACENET_MODEL_FILE_NAME "qmodel.pte"
 
 TEST(FaceRecognizerTests, CreateInsertReadDelete) {
     deleteResource(getResourcePath(VECTORDB_FILE_NAME));

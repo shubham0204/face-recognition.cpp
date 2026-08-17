@@ -31,22 +31,22 @@ FetchContent_MakeAvailable(googletest)
 # ============= facenet_vectorsearch library target configuration ======================
 add_library(facenet_vectorsearch SHARED
         src/FaceDetector.cpp
-        src/FaceDetector.h
+        src/FaceDetector.hpp
         src/FaceEmbedder.cpp
-        src/FaceEmbedder.h
+        src/FaceEmbedder.hpp
         src/VectorIndex.cpp
-        src/VectorIndex.h
+        src/VectorIndex.hpp
         src/FaceRecognizerInternal.cpp
-        src/FaceRecognizerInternal.h
-        src/DetectedFaceEmbeddings.h
-        src/Utils.h
-        include/IntBufferImage.h
-        include/FaceRecognizer.h
-        include/FaceBoundingBox.h
-        include/NNQueryResult.h
+        src/FaceRecognizerInternal.hpp
+        src/DetectedFaceEmbeddings.hpp
+        src/Utils.hpp
+        include/IntBufferImage.hpp
+        include/FaceRecognizer.hpp
+        include/FaceBoundingBox.hpp
+        include/NNQueryResult.hpp
         src/FaceRecognizer.cpp
-        src/Types.h
-        src/Logger.h
+        src/Types.hpp
+        src/Logger.hpp
 )
 target_link_libraries(
         facenet_vectorsearch

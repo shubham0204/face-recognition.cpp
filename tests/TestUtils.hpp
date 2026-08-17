@@ -1,8 +1,8 @@
 #ifndef FACENET_VECTORSEARCH_HELPER_H
 #define FACENET_VECTORSEARCH_HELPER_H
-#include <string>
+#include "FaceEmbedder.hpp"
 #include <filesystem>
-#include "FaceEmbedder.h"
+#include <string>
 
 /**
  *  Accepts a resource `filename` and returns the absolute path.

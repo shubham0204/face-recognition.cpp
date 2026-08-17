@@ -1,4 +1,4 @@
-#include "FaceRecognizer.h"
+#include "FaceRecognizer.hpp"
 
 int main(int argc, char* argv[]) {
     const std::string dbFilePath = "/Users/shubhampanchal/CLionProjects/facenet-vectorsearch/tests/resources/db.bin";

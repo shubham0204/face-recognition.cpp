@@ -4,10 +4,10 @@
 #include <string>
 #include <vector>
 
-#include "FaceBoundingBox.h"
-#include "FaceRecognizer.h"
-#include "IntBufferImage.h"
-#include "NNQueryResult.h"
+#include "FaceBoundingBox.hpp"
+#include "FaceRecognizer.hpp"
+#include "IntBufferImage.hpp"
+#include "NNQueryResult.hpp"
 
 #define LOG_TAG "NativeFaceRecognitionModule"
 #define LOGE(...)                                                                                                                                    \

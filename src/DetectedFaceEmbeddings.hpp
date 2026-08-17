@@ -1,7 +1,7 @@
 #ifndef FACENET_VECTORSEARCH_DETECTEDFACEEMBEDDINGS_H
 #define FACENET_VECTORSEARCH_DETECTEDFACEEMBEDDINGS_H
-#include "FaceEmbedder.h"
-#include "Types.h"
+#include "FaceEmbedder.hpp"
+#include "Types.hpp"
 #include "dlib/geometry/rectangle.h"
 
 class DetectedFaceEmbeddings {

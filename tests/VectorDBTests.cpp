@@ -1,5 +1,5 @@
-#include "TestUtils.h"
-#include "VectorIndex.h"
+#include "TestUtils.hpp"
+#include "VectorIndex.hpp"
 #include <gtest/gtest.h>
 
 #define VECTORDB_FILE_NAME "vectordb.bin"

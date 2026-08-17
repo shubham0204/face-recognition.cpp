@@ -1,6 +1,6 @@
 #ifndef FACENET_VECTORSEARCH_NNQUERYRESUKT_H
 #define FACENET_VECTORSEARCH_NNQUERYRESUKT_H
-#include "FaceBoundingBox.h"
+#include "FaceBoundingBox.hpp"
 
 #include <string>
 

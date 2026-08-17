@@ -1,9 +1,9 @@
-#include "FaceDetector.h"
+#include "FaceDetector.hpp"
 
-#include "FaceEmbedder.h"
-#include <gtest/gtest.h>
-#include "TestUtils.h"
+#include "FaceEmbedder.hpp"
+#include "TestUtils.hpp"
 #include "dlib/image_loader/png_loader.h"
+#include <gtest/gtest.h>
 
 static std::vector<Embedding> getEmbeddingFromFace(const std::string& resourcePath) {
     const auto imageFilePath = getResourcePath(resourcePath);

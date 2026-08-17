@@ -1,8 +1,8 @@
 #ifndef FACENET_VECTORSEARCH_API_H
 #define FACENET_VECTORSEARCH_API_H
 
-#include "IntBufferImage.h"
-#include "NNQueryResult.h"
+#include "IntBufferImage.hpp"
+#include "NNQueryResult.hpp"
 
 #include <memory>
 #include <string>

@@ -1,7 +1,7 @@
 #ifndef FACENET_VECTORSEARCH_FACEEMBEDDER_H
 #define FACENET_VECTORSEARCH_FACEEMBEDDER_H
 
-#include "Types.h"
+#include "Types.hpp"
 #include "dlib/matrix/matrix.h"
 #include "dlib/pixel.h"
 #include "executorch/extension/module/module.h"

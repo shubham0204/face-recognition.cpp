@@ -1,6 +1,6 @@
-#include "VectorIndex.h"
+#include "VectorIndex.hpp"
 
-#include "NNQueryResult.h"
+#include "NNQueryResult.hpp"
 
 #include <thread>
 

@@ -1,10 +1,10 @@
-#include "FaceRecognizer.h"
+#include "FaceRecognizer.hpp"
 #include "Utils.h"
 
 #include <iostream>
 
 int main() {
-    const auto faceRecognizer = createFaceRecognizer(std::format("{}/data/vectordb.bin", SRC_DIR), std::format("{}/data/model.pte", SRC_DIR));
+    const auto faceRecognizer = createFaceRecognizer(std::format("{}/data/vectordb.bin", SRC_DIR), std::format("{}/data/qmodel.pte", SRC_DIR));
     const auto csvData = readCsvData(std::string(SRC_DIR) + "/data/matchpairsDevTrain.csv");
     long correct = 0;
     long total = 0;

@@ -1,7 +1,7 @@
 #ifndef FACENET_VECTORSEARCH_FACEDETECTOR_H
 #define FACENET_VECTORSEARCH_FACEDETECTOR_H
 
-#include "Types.h"
+#include "Types.hpp"
 
 #include "dlib/image_loader/load_image.h"
 #include <dlib/image_processing/frontal_face_detector.h>

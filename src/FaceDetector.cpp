@@ -1,4 +1,4 @@
-#include "FaceDetector.h"
+#include "FaceDetector.hpp"
 
 std::vector<dlib::rectangle> FaceDetector::detectFaces(const DlibRgbImage& inputImage) {
     dlib::matrix<unsigned char> grayImage;
