@@ -5,9 +5,9 @@
 #include <string>
 
 struct NNQueryResult {
-    std::string personName;
+    std::string personName{};
     double cosineSimilarity = 0.0;
-    FaceBoundingBox faceBoundingBox;
+    FaceBoundingBox faceBoundingBox{};
 };
 
 #endif // FACENET_VECTORSEARCH_NNQUERYRESUKT_H

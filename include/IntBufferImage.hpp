@@ -3,9 +3,9 @@
 
 class IntBufferImage {
   public:
-    int* buffer;
-    int width;
-    int height;
+    int* buffer = nullptr;
+    int width = 0;
+    int height = 0;
 };
 
 #endif // FACENET_VECTORSEARCH_INTBUFFERIMAGE_H
